@@ -7,6 +7,11 @@ interface WrapperResponse<T> {
     errorCode: number;
     errorMessage: string | unknown;
   };
+  info: {
+    timeStart: string;
+    timeComplete: string;
+    completionTime: string;
+  };
 }
 
 interface TypedResponse<ResBody> extends Response {
