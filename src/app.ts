@@ -34,22 +34,24 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// add path to swagger, and redirect swagger when hit /
-app.get("/", (_req, res) => {
-  res.redirect("/swagger-ui");
-});
-app.use("/swagger-ui", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+if (process.env.VERCEL_ENV !== "production") {
+  // add path to swagger, and redirect swagger when hit /
+  app.get("/", (_req, res) => {
+    res.redirect("/swagger-ui");
+  });
+  app.use("/swagger-ui", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
-// all router path
-app.use("/user", userController);
+  // all router path
+  app.use("/user", userController);
 
-// redirect user when go to undefined path
-app.use((_req, res) => {
-  const html = fs.readFileSync(
-    `${__dirname}/util/html/redirectSwagger.html`,
-    "utf-8",
-  );
-  res.send(html);
-});
+  // redirect user when go to undefined path
+  app.use((_req, res) => {
+    const html = fs.readFileSync(
+      `${__dirname}/util/html/redirectSwagger.html`,
+      "utf-8",
+    );
+    res.send(html);
+  });
+}
 
 export default app;
